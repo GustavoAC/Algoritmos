@@ -1,0 +1,113 @@
+#include <stdio.h>
+
+//Autor: Gustavo Araujo Carvalho
+
+
+/*
+* Esta função serve para checar se existem dois valores iguais na mesma linha,
+* o que invalidaria a proposição de ser quadrado latino.
+*/
+int checkHorizontal(int n, int matriz[n][n]){
+
+    /*
+    * As variáveis i, j e k servem para iteração.
+    * A variável lat serve como retorno e tem o valor padrão de 1,
+    * que considera que o quadrado já é inicialmente latino.
+    */
+    int i, j, k, lat = 1;
+
+    /*
+    * O primeiro loop serve para percorrer as linhas da matriz, enquanto que
+    * o segundo e o terceiro loop servem para comparar valores que ocupam a
+    * mesma linha, se esses valores forem iguais, o quadrado não é latino e o
+    * valor de lat vai a zero. Há também a condição de parada nos loops para
+    * quando lat for falso (igual a 0), isso serve para quebrar os loops e evitar
+    * processamento desnecessário.
+    * Há o cuidado de se colocar j diferente de k como condição no if para
+    * não comparar valores que são iguais.
+    */
+    for(i = 0; i < n && lat; i++){
+        for(j = 0; j < n && lat; j++){
+            for(k = 0; k < n && lat; k++){
+                if((j != k) && (matriz[i][j] == matriz[i][k]))
+                    lat = 0;
+            }
+        }
+    }
+
+    /*
+    O valor retornado é lat, que serve como uma variável booleana
+    quando se trata de dizer se o quadrado é ou não latino.
+    */
+    return lat;
+}
+
+/*
+* Esta função serve para checar se existem dois valores iguais na mesma coluna,
+* o que invalidaria a proposição de ser quadrado latino.
+*/
+int checkVertical(int n, int matriz[n][n]){
+
+    /*
+    * Essa função tem o funcionamento exatamente igual ao da função checkHorizontal,
+    * com a diferença que procura valores iguais na mesma coluna ao invés de na
+    * mesma linha. As variáveis i, j, e k ainda servem para iteração e lat como a
+    * variável booleana de resposta.
+    */
+    int i, j, k, lat = 1;
+
+    for(j = 0; j < n && lat; j++){
+        for(i = 0; i < n && lat; i++){
+            for(k = 0; k < n && lat; k++){
+                if((i != k) && (matriz[i][j] == matriz[k][j]))
+                    lat = 0;
+            }
+        }
+    }
+
+    /*
+    * O return é o booleano lat, que diz se o quadrado é ou não latino
+    * considerando somente as colunas.
+    */
+    return lat;
+}
+
+/*
+* Esta função serve para preencher a matriz com os valores inseridos pelo
+* usuário. Como arranjos já são por si só um tipo de ponteiro, as mudanças
+* que acontecem nessa função afetam a matriz declarada na função main.
+*/
+void popularMatriz(int n, int matriz[n][n]){
+
+    /*
+    * As variáveis i e j servem para iteração, os loops percorrerão todos os
+    * espaços da matriz e pedirão um valor para o usuário pôr em cada um deles.
+    */
+    int i, j;
+
+    for(i = 0; i < n; i++){
+        for(j = 0; j < n; j++){
+            printf("Linha %i, Coluna %i: ", i+1, j+1);
+            scanf("%i", &matriz[i][j]);
+        }
+    }
+}
+
+int main(){
+
+    int n;
+
+    printf("Bem vindo ao programa do quadrado latino!\n");
+    printf("Digite a medida do quadrado: ");
+    scanf("%i", &n);
+
+    int matriz[n][n];
+    popularMatriz(n, matriz);
+
+    if (checkHorizontal(n, matriz) && checkVertical(n, matriz))
+        printf("A matriz digitada eh um quadrado latino.");
+    else
+        printf("A matriz digitada nao eh um quadrado latino.");
+
+    return 0;
+}
