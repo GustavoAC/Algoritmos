@@ -93,21 +93,49 @@ void popularMatriz(int n, int matriz[n][n]){
     }
 }
 
+/*
+* Esse é o início do programa.
+*/
 int main(){
 
+    /*
+    * A variável n é inicializada, ela armazenará o tamanho da matriz
+    * e servirá como parâmetro para inicializá-la.
+    */
     int n;
 
+    /*
+    * Uma mensagem de boas-vindas é exibida ao usuário, a medida do
+    * quadrado é pedida a ele e é armazenada na variável n.
+    */
     printf("Bem vindo ao programa do quadrado latino!\n");
     printf("Digite a medida do quadrado: ");
     scanf("%i", &n);
 
+    /*
+    * A matriz é inicializada com n linhas e n colunas e, logo após, a função
+    * popularMatriz é chamada e valores são atribuídos.
+    */
     int matriz[n][n];
     popularMatriz(n, matriz);
 
+    /*
+    * A seguir, uma estrutura condicional usa as funções checkHorizontal
+    * e checkVertical para checar se a matriz é ou não um quadrado latino.
+    * As funções retornam valores booleanos de 1 (True) ou 0 (False), e a
+    * matriz só é considerada um quadrado latino se ambas as condições forem
+    * verdadeiras.
+    * Se ambas forem verdadeiras, o programa diz que a matriz é um quadrado
+    * latino, mas se ao menos uma das condições for falsa, o programa dirá
+    * que a matriz não é um quadrado latino.
+    */
     if (checkHorizontal(n, matriz) && checkVertical(n, matriz))
         printf("A matriz digitada eh um quadrado latino.");
     else
         printf("A matriz digitada nao eh um quadrado latino.");
 
+    /*
+    * Fim do programa
+    */
     return 0;
 }
