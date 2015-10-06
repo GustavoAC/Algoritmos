@@ -85,10 +85,16 @@ void popularMatriz(int n, int matriz[n][n]){
     */
     int i, j;
 
+    printf("Digite os valores do quadrado a ser testado:\n");
+
     for(i = 0; i < n; i++){
         for(j = 0; j < n; j++){
-            printf("Linha %i, Coluna %i: ", i+1, j+1);
             scanf("%i", &matriz[i][j]);
+            while(matriz[i][j] > n){
+                printf("Somente valores menores ou iguais ao tamanho do quadrado\n");
+                printf("sao permitidos nesse quadrado latino, digite outro valor.\n");
+                scanf("%i", &matriz[i][j]);
+            }
         }
     }
 }
