@@ -26,14 +26,11 @@ int checkHorizontal(int matriz[9][9]){
     * Há o cuidado de se colocar j diferente de k como condição no if para
     * não comparar valores que são iguais.
     */
-    for(i = 0; i < 9 && lat; i++){
-        for(j = 0; j < 9 && lat; j++){
-            for(k = 0; k < 9 && lat; k++){
+    for(i = 0; i < 9 && lat; i++)
+        for(j = 0; j < 9 && lat; j++)
+            for(k = 0; k < 9 && lat; k++)
                 if((j != k) && (matriz[i][j] == matriz[i][k]))
                     lat = 0;
-            }
-        }
-    }
 
     /*
     O valor retornado é lat, que serve como uma variável booleana
@@ -56,14 +53,11 @@ int checkVertical(int matriz[9][9]){
     */
     int i, j, k, lat = 1;
 
-    for(j = 0; j < 9 && lat; j++){
-        for(i = 0; i < 9 && lat; i++){
-            for(k = 0; k < 9 && lat; k++){
+    for(j = 0; j < 9 && lat; j++)
+        for(i = 0; i < 9 && lat; i++)
+            for(k = 0; k < 9 && lat; k++)
                 if((i != k) && (matriz[i][j] == matriz[k][j]))
                     lat = 0;
-            }
-        }
-    }
 
     /*
     * O return é o booleano lat, que diz se o quadrado é ou não latino
@@ -92,7 +86,7 @@ void popularMatriz(int matriz[9][9]){
     * o que impossibilitaria a medição própria de saber se é ou não um
     * quadrado latino.
     */
-    for(i = 0; i < 9; i++){
+    for(i = 0; i < 9; i++)
         for(j = 0; j < 9; j++){
             scanf("%i", &matriz[i][j]);
             while(matriz[i][j] > 9){
@@ -101,18 +95,15 @@ void popularMatriz(int matriz[9][9]){
                 scanf("%i", &matriz[i][j]);
             }
         }
-    }
 }
 
 int checarMenor(int mini[3][3]){
     int i, j, num, existe = 0;
 
     for(num = 1; num <= 9; num++){
-        for(i = 0; i < 3; i++){
-            for(j = 0; j < 3; j++){
-                    if(mini[i][j] == num) existe++;
-            }
-        }
+        for(i = 0; i < 3; i++)
+            for(j = 0; j < 3; j++)
+                if(mini[i][j] == num) existe++;
         if(existe > 1) return 0;
         existe = 0;
     }
@@ -123,18 +114,14 @@ int checarMenor(int mini[3][3]){
 int checarMenores(int matriz[9][9]){
     int i, j, k, l, mini[3][3];
 
-    for(i = 0; i < 9; i += 3){
+    for(i = 0; i < 9; i += 3)
         for(j = 0; j < 9; j += 3){
-            for(k = 0; k < 3; k++){
-                for(l = 0; l < 3; l++){
+            for(k = 0; k < 3; k++)
+                for(l = 0; l < 3; l++)
                     mini[k][l] = matriz[k+i][l+j];
-                }
-            }
-            if(!checarMenor(mini)){
+            if(!checarMenor(mini))
                 return 0;
-            }
         }
-    }
 
     return 1;
 }
@@ -143,13 +130,10 @@ int main(){
     int matriz[9][9];
     popularMatriz(matriz);
 
-    if(checkHorizontal(matriz) && checkVertical(matriz)){
-        if(checarMenores(matriz)){
-            printf("A matriz inserida forma um Sudoku. Parabéns!");
-            return 0;
-        }
-    }
-    printf("A matriz inserida nao forma um Sudoku. Que pena!");
+    if(checkHorizontal(matriz) && checkVertical(matriz) && checarMenores(matriz))
+        printf("A matriz inserida forma um Sudoku. Parabéns!");
+    else
+        printf("A matriz inserida nao forma um Sudoku. Que pena!");
     return 0;
 }
 
