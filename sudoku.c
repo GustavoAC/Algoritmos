@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-//Autor: Gustavo Araujo Carvalho
-
+//Autores: Gustavo Araujo Carvalho
+//         Yuri Alessandro
 
 /*
 * Esta função serve para checar se existem dois valores iguais na mesma linha,
-* o que invalidaria a proposição de ser quadrado latino.
+* o que invalidaria a proposição da matriz ser um quadrado latino.
 */
 int checkHorizontal(int matriz[9][9]){
 
@@ -82,24 +82,47 @@ void popularMatriz(int matriz[9][9]){
     printf("Digite os valores do quadrado a ser testado:\n");
 
     /*
-    * Há também um loop que impede o usuário de colocar valores acima de n,
-    * o que impossibilitaria a medição própria de saber se é ou não um
-    * quadrado latino.
+    * Há também um loop que impede o usuário de colocar valores acima de 9,
+    * pois o jogo de Sudoku só aceita números de 1 a 9;
     */
     for(i = 0; i < 9; i++)
         for(j = 0; j < 9; j++){
             scanf("%i", &matriz[i][j]);
-            while(matriz[i][j] > 9){
-                printf("Somente valores menores ou iguais a 9 sao permitidos no \n");
-                printf("jogo de sudoku, digite outro valor.\n");
+            while(matriz[i][j] < 1 || matriz[i][j] > 9){
+                printf("Somente valores maiores que 0 e menores ou iguais a 9\n");
+                printf("sao permitidos no jogo de sudoku, digite outro valor.\n");
                 scanf("%i", &matriz[i][j]);
             }
         }
 }
 
+/*
+* Esta função serve para checar os setores menores do jogo de Sudoku, para
+* fazer isso, recebe uma matriz 3x3, que tem o tamanho de um setor do jogo
+* de Sudoku e verifica se esse mesmo é válido.
+* A função passa por todos os valores da matriz e conta a frequência dos
+* números de 1 a 9. Já que todos os quadrados são preenchidos e só existem
+* 9 quadrados em cada setor, ele deve ter valores únicos de 1 a 9 , Se houver
+* um dígito repetido, significa que todos os 9 que deveriam estar presentes
+* não estão, e logo, o Sudoku é inválido.
+*/
 int checarMenor(int mini[3][3]){
+    /*
+    * As variáveis i e j servem para iterar através de todas as posições da
+    * matriz, enquanto que num serve para iterar de 1 a 9, os números que
+    * serão procurados. "existe" é a variável que informa quantas vezes o número
+    * "num" foi encontrado na matriz.
+    */
     int i, j, num, existe = 0;
 
+    /*
+    * Os loops passam por todos os valores da matriz e sempre que encontram o
+    * número "num" em um dos espaços incrementam a variável "existe" em mais 1.
+    * Se "existe" for maior que 1, isto é, se ouver mais de um número "num" no mesmo
+    * setor, o setor é automaticamente inválido e retorna falso. Caso passe por
+    * todos os loops corretamente, não há problemas no setor e função retorna
+    * verdadeiro.
+    */
     for(num = 1; num <= 9; num++){
         for(i = 0; i < 3; i++)
             for(j = 0; j < 3; j++)
@@ -110,10 +133,35 @@ int checarMenor(int mini[3][3]){
 
     return 1;
 }
-
+/*
+* Esta função serve para separar a matriz completa 9x9 em matrizes
+* pequenas 3x3 e enviá-las para a função checarMenor(), para assim serem
+* retornadas como válidas ou não.
+*/
 int checarMenores(int matriz[9][9]){
+    /*
+    * As variáveis i e j servem para iterar sobre a matriz 9x9 e identificar
+    * os setores do Sudoku. Elas crescem de 3 em 3 para ter início exatamente
+    * sobre o primeiro quadrado de cada setor, isso serve de referência para
+    * o começo de onde o programa vai começar a pegar os valores para por na
+    * matriz mini.
+    * As variáveis k e l servem para iterar sobre os elementos da matriz pequena
+    * 3x3; e da matriz 9x9 tomando como início os pontos i e j, para todos os
+    * elementos da matriz grande serem alcançados.
+    * A matriz mini 3x3, na sua vez, armazenará os valores de cada um desses
+    * setores para serem depois enviados para a função checarMenor()
+    */
     int i, j, k, l, mini[3][3];
 
+    /*
+    * Como já dito, os loops de i e j vão iterar sobre o começo de cada setor e
+    * os loops de k e l sobre esses mesmos setores. Quando uma matriz 3x3 for completa,
+    * ela será enviada para a função checarMenor() para verificar se é ou não válida.
+    * Caso ela não seja válida, a função checarMenor() retornará falso, o que causará
+    * a função atual retornar falso também, pois o Sudoku é inválido.
+    * Caso todos os loops sejam completados sem problema, quer dizer que o programa
+    * não achou nenhuma inconsistência, e então a função retornará verdadeiro.
+    */
     for(i = 0; i < 9; i += 3)
         for(j = 0; j < 9; j += 3){
             for(k = 0; k < 3; k++)
@@ -125,15 +173,36 @@ int checarMenores(int matriz[9][9]){
 
     return 1;
 }
-
+/*
+* Este é o início do programa.
+* Primeiramente ele criará uma matriz 9x9 e a enviará para a função popularMatriz().
+* Lá o usuário inserirá valores na matriz.
+*/
 int main(){
     int matriz[9][9];
     popularMatriz(matriz);
 
+    /*
+    * Agora uma estrutura condicional vai verificar se o matriz inserida pelo
+    * usuário é ou não um Sudoku válido.
+    * As funções checkHorizontal() e checkVertixal() vão verificar se a matriz
+    * é um quadrado latino 9x9, uma das condições para ser Sudoku, enquanto
+    * checarMenores vai verificar, com a ajuda de checarMenor(), cada um dos
+    * setores da Matriz, que devem ter valores únicos de 1 a 9 dentro deles;
+    * essa também é uma condição para Sudoku.
+    *
+    * Se as três funções retornarem verdadeiro, significa que a matriz realmente
+    * forma um Sudoku, e uma mensagem que expressa isso será impressa na tela.
+    * Mas se ao menos um desses retornar falso, significa que a matriz não é Sudoku,
+    * e assim uma mensagem será impressa na tela informando isso.
+    */
     if(checkHorizontal(matriz) && checkVertical(matriz) && checarMenores(matriz))
         printf("A matriz inserida forma um Sudoku. Parabéns!");
     else
         printf("A matriz inserida nao forma um Sudoku. Que pena!");
+
+    /*
+    * Fim do Programa.
+    */
     return 0;
 }
-
