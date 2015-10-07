@@ -1,3 +1,2 @@
 # Algoritmo
 Programas variados.
-adsa
