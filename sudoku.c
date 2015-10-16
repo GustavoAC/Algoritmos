@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 //Autores: Gustavo Araujo Carvalho e Yuri Alessandro
+//Contribuidor: Elton Viana <www.eltonviana.com>
 
 /*
 * Esta função serve para checar se existem dois valores iguais na mesma linha,
