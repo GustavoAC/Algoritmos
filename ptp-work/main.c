@@ -1,24 +1,51 @@
 #include <stdio.h>
+#include <string.h>
 
+/*
+&TODO:
+- Evitar erros com nomes de arquivo muito grandes
+- Melhorar leitura da primeira linha do arquivo
+- Separar em funções e bibliotecas diferentes
+- Convencionar o uso das funções (seguir padrões de projeto ao invés de usar Ex: fgets E fscanf)
+- Separar em funções urgentemente
+*/
+
+typedef struct{
+	int red;
+	int green;
+	int blue;
+} Pixel;
 
 
 int main(){
 
-	FILE *image;
-	int n;
-	char ta1, ta2, nome[50];
-	fgets(nome, 50, stdin);
-	printf("%s", nome);
-	image = fopen(".ppm", "r");
-	
-	if(image == NULL) printf("Nem abriu");
-	else{
-		fscanf(image, "%c%c", &ta1, &ta2);
-		if(ta1 == 'P' && ta2 == '3')		
-			while(fscanf(image, "%i", &n) != EOF)
-				fprintf(stdout, "%i ", n);
+	FILE *imagepath;
+	int height, width, i, j;
+	char filetype[3], nome[50];
+
+    scanf("%s", nome);
+    strcat(nome, ".ppm");
+
+	imagepath = fopen(nome, "r");
+
+	if(imagepath == NULL){
+        printf("Nem abriu");
+        return 0;
 	}
-	
-	fclose(FILE *image);
+
+	fgets(filetype, 3, imagepath);
+    fscanf(imagepath, "%i %i", &height, &width);
+    Pixel image[height][width];
+
+    if(filetype[0] == 'P' && filetype[1] == '3')
+        for(i = 0; i < height; i++)
+            for(j = 0; j < height; j++)
+                fscanf(imagepath, "%i %i %i", &image[i][j].red, &image[i][j].green, &image[i][j].blue);
+/*
+    for(i = 0; i < height; i++)
+        for(j = 0; j < height; j++)
+            printf("%i %i %i\n", image[i][j].red, image[i][j].green, image[i][j].blue);
+*/
+	fclose(imagepath);
 	return 0;
 }
