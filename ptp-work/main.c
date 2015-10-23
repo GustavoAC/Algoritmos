@@ -20,11 +20,10 @@ typedef struct{
 int main(){
 
 	FILE *imagepath;
-	int height, width, i, j;
+	int height, width, i, j, clrRange;
 	char filetype[3], nome[50];
-
-    scanf("%s", nome);
-    strcat(nome, ".ppm");
+	scanf("%s", nome);
+	strcat(nome, ".ppm");
 
 	imagepath = fopen(nome, "r");
 
@@ -34,14 +33,14 @@ int main(){
 	}
 
 	fgets(filetype, 3, imagepath);
-    fscanf(imagepath, "%i %i", &height, &width);
-    Pixel image[height][width];
+	fscanf(imagepath, "%i %i %i", &height, &width, &clrRange);
+	Pixel image[height][width];
 
     if(filetype[0] == 'P' && filetype[1] == '3')
         for(i = 0; i < height; i++)
             for(j = 0; j < height; j++)
                 fscanf(imagepath, "%i %i %i", &image[i][j].red, &image[i][j].green, &image[i][j].blue);
-/*
+/* Tire os comentários para imprimir a matriz
     for(i = 0; i < height; i++)
         for(j = 0; j < height; j++)
             printf("%i %i %i\n", image[i][j].red, image[i][j].green, image[i][j].blue);
