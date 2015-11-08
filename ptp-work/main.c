@@ -1,51 +1,32 @@
 #include <stdio.h>
 #include <string.h>
-
-/*
-&TODO:
-- Evitar erros com nomes de arquivo muito grandes
-- Melhorar leitura da primeira linha do arquivo
-- Separar em funções e bibliotecas diferentes
-- Convencionar o uso das funções (seguir padrões de projeto ao invés de usar Ex: fgets E fscanf)
-- Separar em funções urgentemente
-*/
-
-typedef struct{
-	int red;
-	int green;
-	int blue;
-} Pixel;
-
+#include <stdlib.h>
+#include "global.h"
+#include "functions.h"
 
 int main(){
-
 	FILE *imagepath;
-	int height, width, i, j, clrRange;
-	char filetype[3], nome[50];
-	printf("Insira o nome do arquivo:\n")
-	scanf("%s", nome);
-	strcat(nome, ".ppm");
+	header();
 
-	imagepath = fopen(nome, "r");
+	scanf("%s", nome);
+	strcpy(nomeArq, nome);
+	strcat(nomeArq, ".ppm");
+	imagepath = fopen(nomeArq, "r");
 
 	if(imagepath == NULL){
-        printf("Nem abriu");
-        return 0;
+		system("clear");
+		printf("Esse arquivo não foi encontrado.\n");
+		exit(1);
 	}
 
 	fgets(filetype, 3, imagepath);
 	fscanf(imagepath, "%i %i %i", &height, &width, &clrRange);
 	Pixel image[height][width];
+	read_image(image, imagepath);
+    
+	choose_options(image);
 
-    	if(filetype[0] == 'P' && filetype[1] == '3')
-        for(i = 0; i < height; i++)
-            for(j = 0; j < height; j++)
-                fscanf(imagepath, "%i %i %i", &image[i][j].red, &image[i][j].green, &image[i][j].blue);
-/* Tire os comentários para imprimir a matriz
-    	for(i = 0; i < height; i++)
-        	for(j = 0; j < height; j++)
-            		printf("%i %i %i\n", image[i][j].red, image[i][j].green, image[i][j].blue);
-*/
-	fclose(imagepath);
+	create_new_file(image);
+
 	return 0;
 }
