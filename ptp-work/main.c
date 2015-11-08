@@ -20,8 +20,10 @@ int main(){
 	}
 
 	fgets(filetype, 3, imagepath);
-	fscanf(imagepath, "%i %i %i", &height, &width, &clrRange);
-	Pixel image[height][width];
+	fscanf(imagepath, "%i %i %i", &width, &height, &clrRange);
+	if(height > width) lat = height;
+	else lat = width;
+	Pixel image[lat][lat];
 	read_image(image, imagepath);
     
 	choose_options(image);
