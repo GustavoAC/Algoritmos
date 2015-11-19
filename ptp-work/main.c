@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "global.h"
-#include "functions.h"
+#include "bib/global.h"
+#include "bib/functions.h"
+#include "bib/effects.h"
 
 int main(){
 	FILE *imagepath;
@@ -27,8 +28,6 @@ int main(){
 	read_image(image, imagepath);
     
 	choose_options(image);
-
-	create_new_file(image);
 
 	return 0;
 }
