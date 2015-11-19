@@ -1,18 +1,3 @@
-/* TODO:
-* Colocar o controle de todos os giros numa opção só
-* Função pra pular os comentários na leitura do arquivo
-* Restante das funções necessárias
-* Funções de espelhamento para extras
-* (Talvez) Superblur
-* Comentar código
-* jpg para ppm e vice-versa
-* RLE
-* Color wheels
-* Consertar ROTR
-*/
-
-
-
 void header(){
 	system("clear");
 	printf("Bem vindo ao programa!\n");
@@ -38,128 +23,6 @@ void read_image(Pixel image[lat][lat], FILE *imagepath){
 
 }
 
-void ef_black_white(Pixel image[lat][lat]){
-	int i, j, gray;
-	strcat(nome, "_bw.ppm");
-
-	for(i = 0; i < height; i++)
-		for(j = 0; j < width; j++){
-			gray = (image[i][j].blue + image[i][j].green + image[i][j].red)/3;
-			image[i][j].blue = gray;
-			image[i][j].red = gray;
-			image[i][j].green = gray;
-		}
-}
-
-void ef_thresholding(Pixel image[lat][lat]){
-	int i, j, gray;
-	strcat(nome, "_thr.ppm");
-	for(i = 0; i < height; i++)
-		for(j = 0; j < width; j++){
-			gray = (image[i][j].blue + image[i][j].green + image[i][j].red)/3;
-			if(gray > clrRange/2){
-				image[i][j].blue = 1;
-				image[i][j].green = 1;
-				image[i][j].red = 1;
-			}else{
-				image[i][j].blue = 0;
-				image[i][j].green = 0;
-				image[i][j].red = 0;
-			}
-		}
-
-    clrRange = 1;
-}
-
-
-//Testar com matriz separada da original.
-//Não funciona com imagens retangulares
-void ef_blur(Pixel image[lat][lat]){
-	int i, j;
-	strcat(nome, "_blu.ppm");
-	for(i = 1; i < lat-1; i++)
-		for(j = 1; j < lat-1; j++){
-				image[i][j].blue += image[i-1][j-1].blue + image[i-1][j].blue +
-					image[i-1][j+1].blue + image[i][j-1].blue + image[i][j+1].blue +
-					image[i+1][j-1].blue + image[i+1][j].blue + image[i+1][j+1].blue;
-				image[i][j].blue /= 9;
-
-				image[i][j].green += image[i-1][j-1].green + image[i-1][j].green +
-					image[i-1][j+1].green + image[i][j-1].green + image[i][j+1].green +
-					image[i+1][j-1].green + image[i+1][j].green + image[i+1][j+1].green;
-				image[i][j].green /= 9;
-
-				image[i][j].red += image[i-1][j-1].red + image[i-1][j].red +
-					image[i-1][j+1].red + image[i][j-1].red + image[i][j+1].red +
-					image[i+1][j-1].red + image[i+1][j].red + image[i+1][j+1].red;
-				image[i][j].red /= 9;
-		}
-
-}
-//Bugado
-void ef_rotate_right(Pixel image[lat][lat]){
-	int i, j, k;	
-	Pixel temp[lat][lat];
-	strcat(nome, "_rotl.ppm");
-
-	for(i = 0; i < height; i++)
-		for(j = 0; j < width; j++)
-			temp[i][j] = image[i][j];
-	
-	for (i = 0; i < height; i++)
-        	for (j = 0; j < width; j++)
-           		 image[j][width-i-1] = temp[i][j];
-
-	k = height;
-	height = width;
-	width = k;
-}
-
-//FUNCIONA!!!
-void ef_rotate_left(Pixel image[lat][lat]){
-	int i, j, k;	
-	Pixel temp[lat][lat];
-	strcat(nome, "_rotl.ppm");
-
-	for(i = 0; i < height; i++){
-		for(j = 0; j < width; j++){
-			temp[i][j] = image[i][j];
-		}
-	}
-	
-	for (i = 0; i < height; i++)
-        	for (j = 0; j < width; j++)
-           		 image[width-j-1][i] = temp[i][j];
-
-	k = height;
-	height = width;
-	width = k;
-}
-
-// Função espelhar?
-// Descoberto acidentalmente, tem que checar se usa height ou width
-// Quebra em imagens retangulares
-void ef_mirror_horizontal(Pixel image[lat][lat]){
-	int i, j;	
-	Pixel temp[lat][lat];
-	strcat(nome, "_mir.ppm");
-	
-	for(i = 0; i < height; i++){
-		for(j = 0; j < width; j++){
-			temp[i][width-j].red = image[i][j].red;
-			temp[i][width-j].green = image[i][j].green;
-			temp[i][width-j].blue = image[i][j].blue;
-		}
-	}
-	
-	for(i = 0; i < height; i++){
-		for(j = 0; j < width; j++){
-			image[i][j] = temp[i][j];
-		}
-	}
-}
-
-
 void create_new_file(Pixel image[lat][lat]){
 	int i, j;
 	FILE *newfile;
@@ -183,42 +46,108 @@ void null_matrix(Pixel image[lat][lat]){
 		}
 }
 
+void controle_rotacao(Pixel image[lat][lat]){
+	int ang;
+	printf("Digite o angulo de rotação (em sentido horario):\n");
+	scanf("%i", &ang);
+	switch (ang){
+		case 90:
+			strcat(nome, "_rot_90.ppm");
+			ef_rotate_left(image);
+			ef_rotate_left(image);
+			ef_rotate_left(image);
+			break;
+		case 180:
+			strcat(nome, "_rot_180.ppm");
+			ef_rotate_left(image);
+			ef_rotate_left(image);
+			break;
+		case 270:
+			strcat(nome, "_rot_270.ppm");
+			ef_rotate_left(image);
+			break;
+		default:
+			system("clear");
+			printf("Escolha um angulo reto: 90 - 180 - 270 \n");
+			controle_rotacao(image);			
+	}
+}
+
 void choose_options(Pixel image[lat][lat]){
 	int escolha;
+	
+	printf("\n======== Escolha uma opção =======\n");
+	printf("1 - thr     //    Thresholding   *\n");
+	printf("2 - blur    //    Blurring       *\n");
+	printf("3 - sha     //    Sharpennig     *\n");
+	printf("4 - rot     //    Rotacionar     *\n");
+	printf("5 - amp     //    Ampliar        *\n");
+	printf("6 - red     //    Reduzir        *\n");
+	printf("==================================\n");
 
-	printf("== Pressione a opção desejada ==\n");
-	printf("1 - thr // Thresholding\n");
-	printf("2 - bw  // Black & White\n");
-	printf("3 - blu // Blurring\n");
-	printf("4 - RotR// Rotate Right (Broken)\n");
-	printf("5 - RotL// Rotate Left\n");
-	printf("6 - Mir // Mirror\n");
-	printf("================================\n");
+	printf("============= Extras =============\n");
+	printf("10 - bw     //    Preto e Branco *\n");
+	printf("11 - Mir    //    Espelhar       *\n");
+	printf("12 - borda  //    Detecta Bordas *\n");
+	printf("13 - inv    //    Negativo       *\n");
+	printf("14 - sep    //    Tom de sepia   *\n");
+	printf("==================================\n");
 
 	scanf("%i", &escolha);
 	controller(escolha, image);
 }
 
 void controller(int opcao, Pixel image[lat][lat]){
-	if(opcao == STR)
-		ef_thresholding(image);
-	else if(opcao == BW)
+	if(opcao == THR){
+		int grau;
+		printf("Insira o padrão de binarização entre 0 e 255 (Padrão = 127)\n");
+		scanf("%i", &grau);
+		sprintf(nomeArq, "_thr_%i.ppm", grau);
+		strcat(nome, nomeArq);
+		ef_thresholding(image, grau);
+	}else if(opcao == BW){
+		strcat(nome, "_bw.ppm");
 		ef_black_white(image);
-	else if(opcao == BLU)
+	}else if(opcao == RED){
+		int grau;
+		printf("Quantas vezes deseja reduzir a imagem?\n");
+		scanf("%i", &grau);
+		sprintf(nomeArq, "_red_%i.ppm", grau);
+		strcat(nome, nomeArq);
+		ef_reduzir(image, grau);
+	}else if(opcao == BLU){
+		strcat(nome, "_blur.ppm");
 		ef_blur(image);
-	else if(opcao == ROTR)
-		ef_rotate_right(image);
-	else if(opcao == ROTL)
-		ef_rotate_left(image);
-	else if(opcao == MIR)
-		ef_mirror_horizontal(image);
-	else{
+	}else if(opcao == ROTL){
 		system("clear");
-		printf("Opção inválida, tente novamente.\n\n");
+		controle_rotacao(image);
+	}else if(opcao == MIR){
+		strcat(nome, "_mir.ppm");
+		ef_mirror_horizontal(image);
+	}else if(opcao == SHAR){
+		strcat(nome, "_shar.ppm");
+		ef_sharpening(image);
+	}else if(opcao == AMP){
+		int grau;
+		printf("Quantas vezes deseja ampliar a imagem?\n");
+		scanf("%i", &grau);
+		sprintf(nomeArq, "_amp_%i.ppm", grau);
+		strcat(nome, nomeArq);
+		ef_ampliar(image, grau);
+	}else if(opcao == BORDA){
+		strcat(nome, "_bordas.ppm");
+		ef_detecta_borda(image);
+	}else if(opcao == INV){
+		strcat(nome, "_neg.ppm");
+		ef_inverte_cores(image, clrRange);
+	}else if(opcao == SEP){
+		strcat(nome, "_sepia.ppm");
+		ef_sepia(image);
+	}else{
+		system("clear");
+		printf("Essa opcao nao existe, tente novamente.\n\n");
 
 		choose_options(image);
 
 	}
 }
-
-
