@@ -7,12 +7,12 @@
 
 int main(){
 	FILE *imagepath;
-	header();
+	intro();
 
-	scanf("%s", nome);
-	strcpy(nomeArq, nome);
-	strcat(nomeArq, ".ppm");
-	imagepath = fopen(nomeArq, "r");
+	scanf("%s", name);
+	strcpy(nameFile, name);
+	strcat(nameFile, ".ppm");
+	imagepath = fopen(nameFile, "r");
 
 	if(imagepath == NULL){
 		system("clear");
