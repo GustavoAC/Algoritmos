@@ -5,10 +5,10 @@ typedef struct{
 } Pixel;
 
 int lat, height, width, clrRange;
-char filetype[3], nome[50], nomeArq[55];
+char filetype[3], name[50], nameFile[55];
 
-enum {THR = 1, BLU = 2, SHAR = 3, ROTL = 4, AMP = 5, RED = 6} options;
-enum {BW = 10, MIR, BORDA, INV, SEP} extra;
+enum {THR = 1, BLU, SHAR, ROT, AMP, RED} options;
+enum {BW = 10, MIR, BORD, INV, SEP} extra;
 
 /* TO DO:
 * Função pra pular os comentários na leitura do arquivo
@@ -16,22 +16,22 @@ enum {BW = 10, MIR, BORDA, INV, SEP} extra;
 * RLE
 */
 
-void header();
+void intro();
 void read_image(Pixel image[lat][lat], FILE *imagepath);
 void create_new_file(Pixel image[lat][lat]);
 void null_matrix(Pixel image[lat][lat]);
-void controle_rotacao(Pixel image[lat][lat]);
+void rotation_controller(Pixel image[lat][lat]);
 void choose_options(Pixel image[lat][lat]);
-void controller(int opcao, Pixel image[lat][lat]);
+void controller(int choice, Pixel image[lat][lat]);
 
-void ef_black_white(Pixel image[lat][lat]);
-void ef_thresholding(Pixel image[lat][lat], int grau);
+void ef_thresholding(Pixel image[lat][lat], int value);
 void ef_blur(Pixel image[lat][lat]);
 void ef_sharpening(Pixel image[lat][lat]);
 void ef_rotate_left(Pixel image[lat][lat]);
-void ef_mirror_horizontal(Pixel image[lat][lat]);
-void ef_ampliar(Pixel image[lat][lat], int grau);
-void ef_reduzir(Pixel image[lat][lat], int grau);
-void ef_detecta_borda(Pixel image[lat][lat]);
-void ef_inverte_cores(Pixel image[lat][lat], int clrRange);
+void ef_enlarge(Pixel image[lat][lat], int value);
+void ef_reduce(Pixel image[lat][lat], int value);
+void ef_black_white(Pixel image[lat][lat]);
+void ef_horizontal_mirror(Pixel image[lat][lat]);
+void ef_border_detection(Pixel image[lat][lat]);
+void ef_negative(Pixel image[lat][lat], int clrRange);
 void ef_sepia(Pixel image[lat][lat]);
