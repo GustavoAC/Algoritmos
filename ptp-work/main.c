@@ -15,9 +15,16 @@ int main(){
 	imagepath = fopen(nameFile, "r");
 
 	if(imagepath == NULL){
-		system("clear");
-		printf("Esse arquivo não foi encontrado.\n");
-		exit(1);
+		strcpy(nameFile, name);
+		strcat(nameFile, ".ppmc");
+		imagepath = fopen(nameFile, "r");
+			if(imagepath != NULL){
+				decompress_img(imagepath);
+			}else{
+				system("clear");
+				printf("Esse arquivo não foi encontrado.\n");
+				exit(1);
+			}
 	}
 
 	fgets(filetype, 3, imagepath);
