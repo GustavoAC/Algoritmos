@@ -7,8 +7,8 @@ typedef struct{
 int lat, height, width, clrRange;
 char filetype[3], name[50], nameFile[55];
 
-enum {THR = 1, BLU, SHAR, ROT, AMP, RED} options;
-enum {BW = 10, MIR, BORD, INV, SEP} extra;
+enum {EXIT = 0, THR, BLU, SHAR, ROT, AMP, RED} options;
+enum {BW = 10, MIR, BORD, INV, SEP, COMP} extra;
 
 /* TO DO:
 * Função pra pular os comentários na leitura do arquivo
@@ -23,6 +23,8 @@ void null_matrix(Pixel image[lat][lat]);
 void rotation_controller(Pixel image[lat][lat]);
 void choose_options(Pixel image[lat][lat]);
 void controller(int choice, Pixel image[lat][lat]);
+void compress_img(Pixel image[lat][lat]);
+void decompress_img(FILE *imagepath);
 
 void ef_thresholding(Pixel image[lat][lat], int value);
 void ef_blur(Pixel image[lat][lat]);
