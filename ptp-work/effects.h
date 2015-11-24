@@ -141,6 +141,8 @@ void ef_enlarge(Pixel image[lat][lat], int value){
 				for(l = 0; l < value; l++)
 					fprintf(newfile, "%i %i %i ", image[i][j].red, image[i][j].green, image[i][j].blue);
 
+	fclose(newfile);
+	
 	system("clear");
     printf("O arquivo %s foi criado com sucesso na pasta raíz do programa.\n", name);
 }
