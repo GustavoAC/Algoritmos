@@ -91,21 +91,26 @@ void choose_options(Pixel image[lat][lat]){
 	printf("12 - borda  //    Detecta Bordas *\n");
 	printf("13 - inv    //    Negativo       *\n");
 	printf("14 - sep    //    Tom de sepia   *\n");
-	printf("==================================\n");
+	printf("15 - comp   //    Compressão RLE *\n");
+	printf("==================================\n\n");
+
+	printf("[0 - Exit]\n");
+
 
 	scanf("%i", &choice);
 	controller(choice, image);
 }
 
 void controller(int choice, Pixel image[lat][lat]){
+	int value;
+
 	switch(choice){
 		case THR:
-			int grau;
 			printf("Insira o padrão de binarização entre 0 e 255 (Padrão = 127)\n");
-			scanf("%i", &grau);
-			sprintf(nameFile, "_thr_%i.ppm", grau);
+			scanf("%i", &value);
+			sprintf(nameFile, "_thr_%i.ppm", value);
 			strcat(name, nameFile);
-			ef_thresholding(image, grau);
+			ef_thresholding(image, value);
 			break;
 
 		case BLU:
@@ -124,21 +129,19 @@ void controller(int choice, Pixel image[lat][lat]){
 			break;
 
 		case AMP:
-			int grau;
 			printf("Quantas vezes deseja ampliar a imagem?\n");
-			scanf("%i", &grau);
-			sprintf(nameFile, "_amp_%i.ppm", grau);
+			scanf("%i", &value);
+			sprintf(nameFile, "_amp_%i.ppm", value);
 			strcat(name, nameFile);
-			ef_enlarge(image, grau);
+			ef_enlarge(image, value);
 			break;
 
 		case RED:
-			int grau;
 			printf("Quantas vezes deseja reduzir a imagem?\n");
-			scanf("%i", &grau);
-			sprintf(nameFile, "_red_%i.ppm", grau);
+			scanf("%i", &value);
+			sprintf(nameFile, "_red_%i.ppm", value);
 			strcat(name, nameFile);
-			ef_reduce(image, grau);
+			ef_reduce(image, value);
 			break;
 
 		case BW:
@@ -165,6 +168,14 @@ void controller(int choice, Pixel image[lat][lat]){
 			strcat(name, "_sepia.ppm");
 			ef_sepia(image);
 			break;
+		
+		case COMP:
+			strcat(name, "_comp.ppmc");
+			compress_img(image);
+			break;
+			
+		case EXIT:
+			exit(1);
 
 		default:
 			system("clear");
@@ -172,4 +183,57 @@ void controller(int choice, Pixel image[lat][lat]){
 			choose_options(image);
 			break;
 	}
+}
+
+void compress_img(Pixel image[lat][lat]){
+	int i, j, mult = 0;
+	Pixel temp = image[0][0];
+
+	FILE *newfile;
+	newfile = fopen(name, "w");
+
+	fprintf(newfile, "%s\n%i %i\n%i\n", filetype, width, height, clrRange);
+
+	for(i = 0; i < height; i++){
+		for(j = 0; j < width; j++){
+			if(temp.red == image[i][j].red && temp.green == image[i][j].green && temp.blue == image[i][j].blue){
+				mult++;
+			}else{
+				fprintf(newfile, "%i(%i %i %i)\n", mult, temp.red, temp.green, temp.blue);
+				mult = 1;
+				temp = image[i][j];
+			}
+		}
+	}
+
+	fprintf(newfile, "%i(%i %i %i) ", mult, temp.red, temp.green, temp.blue);
+	fclose(newfile);
+
+	//system("clear");
+    printf("O arquivo %s foi criado com sucesso na pasta raíz do programa.\n", name);
+}
+
+void decompress_img(FILE *imagepath){
+	FILE *newfile;
+	int i, mult = 0;
+	Pixel temp;
+
+	strcpy(nameFile, name);
+	strcat(nameFile, "_decomp.ppm");
+	newfile = fopen(nameFile, "w");
+
+	printf("O arquivo indicado está comprimido, começando descompressão\n");
+
+	fgets(filetype, 3, imagepath);
+	fscanf(imagepath, "%i %i %i", &width, &height, &clrRange);
+	fprintf(newfile, "%s\n%i %i\n%i\n", filetype, width, height, clrRange);
+
+	while(fscanf(imagepath, "%i(%i %i %i)", &mult, &temp.red, &temp.green, &temp.blue) != EOF)
+		for (i = 0; i < mult; i++)
+			fprintf(newfile, "%i %i %i ", temp.red, temp.green, temp.blue);
+
+	fclose(newfile);
+	imagepath = fopen(nameFile, "r");
+
+	printf("O arquivo foi descomprimido com sucesso.\n");
 }
