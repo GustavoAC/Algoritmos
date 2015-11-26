@@ -1,20 +1,31 @@
+/**
+* \file global.h
+* \brief Contém as assinaturas das principais funções e as variáveis globais.
+*/
+
+/**
+ * Struct que contém os valores RGB de um determinado pixel. */
 typedef struct{
-	int red;
-	int green;
-	int blue;
+	int red;	 /**<Amarzena o valor correspondente ao tom de vermelho.*/
+	int green;   /**<Armazena o valor correspondente ao tom de verde.*/
+	int blue;    /**<Armazena o valor correspondente ao tom de azul.*/
 } Pixel;
 
-int lat, height, width, clrRange;
-char filetype[3], name[50], nameFile[55];
+int lat;		/**<Recebe o maior valor entre altura e largura.*/
+int height; 	/**<Recebe o valor da altura.*/
+int width; 		/**<Recebe o valor da largura.*/
+int clrRange;	/**<Recebe o valor da escala máxima de cores.*/
 
+char filetype[3]; 	/**<Recebe o tipo de PPM, verificando se o arquivo é P3 (tratado nesse programa).*/
+char name[50]; 		/**<Recebe o nome do arquivo da imagem que será tratada.*/
+char nameFile[55];	/**<Recebe o nome concatenado do arquivo da imagem com a extensão (.PPM).*/ 
+
+/** 
+ * Enumerações que determina a escolha que o usuário fez no menu de opções de efeitos. */
 enum {EXIT = 0, THR, BLU, SHAR, ROT, AMP, RED} options;
+/** 
+ * Enumerações que determina a escolha que o usuário fez no menu de opções de efeitos extras. */
 enum {BW = 10, MIR, BORD, INV, SEP, COMP} extra;
-
-/* TO DO:
-* Função pra pular os comentários na leitura do arquivo
-* Comentar código
-* RLE
-*/
 
 void intro();
 void read_image(Pixel image[lat][lat], FILE *imagepath);
