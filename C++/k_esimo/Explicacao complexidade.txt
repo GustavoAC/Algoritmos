@@ -1,0 +1,8 @@
+O pior caso será quando k = n e o vetor for estritamente decrescente.
+Com um vetor exemplo {5, 4, 3, 2, 1} pode ser visto que o 5 será trocado com o 4, e o 4 com o 3,
+e assim em diante até resultar no novo vetor {1, 5, 4, 3, 2}.
+Em seguida, o processo se repetirá sem o primeiro elemento, resultando em {1, 2, 5, 4, 3}.
+Como pode ser visto, num vetor estritamente decrescente sempre haverá a troca entre valores, e a mesmo ocorrerá
+para todos os elementos no vetor no caso que k = n.
+Como existem dois loops que dependem do tamanho n do vetor e todas as ações sempre serão tomadas, a complexidade
+desse algoritmo é n^2.

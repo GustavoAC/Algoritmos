@@ -1,0 +1,31 @@
+Gustavo Araújo Carvalho
+Yuri Alessandro Dantas Tonheca Martins
+
+Na pasta base do programa, compile com
+g++ -Wall -std=c++11 -I include/ include/functions.cpp src/main.cpp -o [nomeDeSaida]
+
+Para rodar o programa recebe:
+arrSz: O tamanho do array desejado para os testes
+
+testType: O tipo de caso a ser testado [1, 3]
+1 = Pior caso
+2 = Key em 3/4 do vetor
+3 = Terceira ocorência
+
+functionType: O tipo de função que se deseja usar [0, 7], sendo elas:
+0 = bus_seq_it;
+1 = bus_seq_rec;
+2 = wrap_sys_search;
+3 = bus_bin_it;
+4 = bus_bin_rec;
+5 = bus_ter_it;
+6 = bus_ter_rec;
+7 = wrap_sys_bsearch;
+
+Exemplo de execução: 
+./ex 268435456 1 0
+(Se o programa for rodado sem argumentos, ele usará os valores padrões acima)
+
+É opcional adicionar -DALL_TESTS para fazer o programa rodar todos os testes com
+a exceção da busca sequencial recursiva, que naturalmente sempre causa um erro de estouro de pilha
+com N's grandes.
