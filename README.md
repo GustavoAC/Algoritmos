@@ -1,2 +1,2 @@
-# Algoritmo
+# Algoritmos
 Programas variados.
